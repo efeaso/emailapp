@@ -4,10 +4,8 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-
 import { horizontal, vertical } from "@/lib/Alert";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { isEmail, isPassword } from "@/lib/validation";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -17,32 +15,26 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState(false);
   const [error, setError] = useState("");
-
   const session = useSession();
 
   useEffect(() => {
     const getData = () => {
-      if (localStorage.getItem("email") && localStorage.getItem("password")) {
+      if (localStorage.getItem("password")) {
         setPassword(localStorage.getItem("password"));
       }
     };
-
     getData();
-  });
+  }, []); // Added dependency array to prevent continuous re-renders
 
   // Notification handler
   const [open, setOpen] = useState(false);
-  const handleClick = () => {
-    setOpen(true);
-  };
+  const handleClick = () => setOpen(true);
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    if (reason === "clickaway") return;
     setOpen(false);
   };
 
-  // Form Submition
+  // Form Submission
   const submitForm = async () => {
     if (!password) {
       setError("Please type in the Access Key");
@@ -54,18 +46,24 @@ export default function Login() {
       localStorage.setItem("password", password);
     }
 
-    console.log(check);
+    // Get the current URL for dynamic callback
+    const currentURL = new URL(window.location.href);
+    const baseURL = `${currentURL.protocol}//${currentURL.host}`;
 
-    const response = await signIn("credentials", {
-      password,
-       redirect: true,
-       callbackUrl: "/",
-    });
+    try {
+      const response = await signIn("credentials", {
+        password,
+        redirect: true,
+        callbackUrl: `${baseURL}/`, // Use dynamic base URL
+      });
 
-    console.log(response);
-
-    if (!response) {
-      setError("Invalid Access Key");
+      if (!response?.ok) {
+        setError("Invalid Access Key");
+        handleClick();
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An error occurred during login");
       handleClick();
     }
   };
@@ -98,7 +96,7 @@ export default function Login() {
               />
             </div>
             <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-              <form>
+              <form onSubmit={(e) => e.preventDefault()}>
                 <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
                   <p className="text-center font-semibold mx-4 mb-0">LOGIN</p>
                 </div>
@@ -131,10 +129,10 @@ export default function Login() {
                   <button
                     className="p-2 bg-gray-200 py-1"
                     onClick={() => {
-                      //  setEmail("");
-                      //  setPassword("");
+                      setPassword("");
                       localStorage.clear();
                     }}
+                    type="button"
                   >
                     <HighlightOffIcon className="text-red-500 mr-2" />
                     clear field

@@ -7,25 +7,29 @@ export const options = {
       credentials: {
         password: { label: "Access Key", type: "text" },
       },
-
       async authorize(credentials, req) {
-        //   const result = await validateCode(credentials.password);
-
-        //  console.log(result);
-
         if (credentials.password !== "solgambles307") {
           return null;
         }
 
-        const user = {
+        return {
+          id: "1", // Adding an id is required
           name: credentials.password,
         };
-
-        //       localStorage.setItem("access_key", user.name);
-
-        return user;
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login", // Specify custom login page
+  },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
+  },
 };
