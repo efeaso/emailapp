@@ -1,0 +1,35 @@
+{
+  "name": "emailservicenextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.15",
+    "@mui/material": "^5.14.15",
+    "aws-sdk": "^2.1527.0",
+    "axios": "^1.6.2",
+    "firebase": "^11.0.2",
+    "next": "13.5.6",
+    "next-auth": "^4.24.3",
+    "nodemailer": "^6.9.7",
+    "react": "^18",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18",
+    "twilio": "^4.20.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10",
+    "daisyui": "^3.9.4",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.6",
+    "postcss": "^8",
+    "tailwindcss": "^3"
+  }
+}
