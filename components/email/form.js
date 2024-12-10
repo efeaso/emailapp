@@ -194,6 +194,7 @@ export default function Form() {
             Mail.ru
           </option>
           <option value="FastMail">Fastmail</option>
+          <option value="zoho">Zoho Mail</option>
         </select>
 
         <span className="ml-3">

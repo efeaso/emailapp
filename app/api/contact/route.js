@@ -16,17 +16,35 @@ export async function POST(request) {
       sender_name,
     } = await request.json();
 
+    let transportConfig;
 
-    var transporter = nodemailer.createTransport({
-      service: emailService,
-      auth: {
-        user: sender_email,
-        pass: password,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+    if (emailService === "zoho") {
+      transportConfig = {
+        host: "smtp.zoho.com",
+        port: 465,
+        secure: true, // use SSL
+        auth: {
+          user: sender_email,
+          pass: password,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      };
+    } else {
+      transportConfig = {
+        service: emailService,
+        auth: {
+          user: sender_email,
+          pass: password,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      };
+    }
+
+    var transporter = nodemailer.createTransport(transportConfig);
 
     const names = recipient_name.split(" ");
     let displayName = name + " " + sender_email;
@@ -36,7 +54,8 @@ export async function POST(request) {
     }
 
     const mailOption = {
-      from: `"${displayName}" <${sender_email}>`,
+      //      from: `"${displayName}" <${sender_email}>`,
+      from: `"${displayName}"`,
       to: recipient_email,
       subject: subject,
       headers: {
@@ -58,9 +77,7 @@ export async function POST(request) {
       ${greeting},<br/>
       ${name}
     </div>
-    <div style="margin-top: 15px; font-size: 12px; color: #666;">
-      If you wish to unsubscribe from these emails, please reply with "unsubscribe" in the subject line.
-    </div>
+    
   </body>
   </html>
 `,
