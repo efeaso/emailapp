@@ -16,7 +16,7 @@ export async function POST(request) {
       sender_name,
     } = await request.json();
 
-    throw new Error("Failed to Send Email");
+//    throw new Error("Failed to Send Email");
 
     let transportConfig;
 
