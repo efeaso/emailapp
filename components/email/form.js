@@ -39,6 +39,9 @@ export default function Form() {
   // Contact List State
   const [contactsList, setContactsList] = useState([]);
 
+  // intro
+  const [intro, setIntro] = useState("Hi");
+
   // Form States
   const [emailService, setEmailService] = useState("gmail");
   const [emailAddress, setEmailAddress] = useState("");
@@ -143,6 +146,7 @@ export default function Form() {
             name: contactsList[i].sender_name,
             recipient_name: contactsList[i].receiver_name,
             sender_name: senderName,
+            intro: intro,
             greeting,
           }),
         });
@@ -241,6 +245,18 @@ export default function Form() {
           <span className="ml-1 my-2">Full Name as Subject</span>
         </div>
       </div>
+
+      <select
+        className="py-1 px-2 border rounded-lg"
+        onChange={(event) => setIntro(event.target.value)}
+      >
+        <option value="Hi">Hi</option>
+        <option defaultValue value="Good Morning">
+          Good Morning
+        </option>
+        <option value="Good Afternoon">Good Afternoon</option>
+        <option value="Good day">Good day</option>
+      </select>
 
       <textarea
         id="message"

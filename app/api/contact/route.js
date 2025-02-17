@@ -13,6 +13,7 @@ export async function POST(request) {
       password,
       name,
       recipient_name,
+      intro,
       greeting,
       sender_name,
     } = await request.json();
@@ -26,6 +27,7 @@ export async function POST(request) {
       password,
       name,
       recipient_name,
+      intro,
       greeting,
       sender_name,
     });
